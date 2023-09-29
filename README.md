@@ -1,5 +1,22 @@
 #  A good question is all your need!:point_up:
-### :rocket::rocket::rocket::rocket:This is a project from FDU team Infinite.
+### :rocket::rocket::rocket::rocket:
+
+                .-"""-.
+               / .===. \
+               \/ 6 6 \/
+               ( \___/ )
+  _________ooo__\_____/_____________
+ /                                  \
+ | a project from FDU team Infinite.|
+ \_______________________ooo________/ 
+                |  |  |
+                |_ | _|
+                |  |  |
+                |__|__|
+                /-'Y'-\
+               (__/ \__)
+
+
 ### As the llm' development speeds up, we need more accurate questions to cope with the rising request prices.
 ### Our mission is to make it automatic and boost the llm's ability.:facepunch:
 ---
