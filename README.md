@@ -1,5 +1,6 @@
 #  A good question is all your need!:point_up:
 ### :rocket::rocket::rocket::rocket:
+```
 
                 .-"""-.
                / .===. \
@@ -15,7 +16,7 @@
                 |__|__|
                 /-'Y'-\
                (__/ \__)
-
+```
 
 ### As the llm' development speeds up, we need more accurate questions to cope with the rising request prices.
 ### Our mission is to make it automatic and boost the llm's ability.:facepunch:
