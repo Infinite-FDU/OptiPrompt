@@ -38,9 +38,10 @@ with st.sidebar:
         ("Baichuan-13B-Chat", ""),
         placeholder="Select...",)
     st.write("Model name:", MODEL_NAME)
-    max_new_tokens = st.number_input("Set max new tokens", value=1024)
+    max_new_tokens = st.number_input("Set max new tokens", value=512)
     st.write("Max new tokens:", max_new_tokens)
-    user_input_type = st.radio("Select input type", ["fact", "code", "default"], index=None)
+    user_input_type = st.radio("Select input type", ["fact", "code", "entertainment", "utility", "personal", "default"], index=None)
+
 
 # load llm
 llm = load_transformers_llm(MODEL_NAME, max_new_tokens)
