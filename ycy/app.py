@@ -17,7 +17,7 @@ st.title("Infinit FDU Chatbot")
 @st.cache_resource
 def load_transformers_llm(model_name, max_new_tokens):
     # Define the base folder path
-    base_folder_path = "F:/Study/Code/llm-models"
+    base_folder_path = "D:/wht/Intel_BigDL_LLM/Model/llm-models"
 
     # Append MODEL_NAME to the folder path
     model_path = base_folder_path + "/" + model_name
