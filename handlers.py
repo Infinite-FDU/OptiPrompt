@@ -2,9 +2,18 @@
 import streamlit as st
 from langchain.prompts import ChatPromptTemplate
 from langchain.chains import LLMChain
-from prompt_templates import fact_prompt, code_prompt
-import re
+from prompt_templates import fact_prompt, code_prompt, utility_prompt, personal_prompt, entertainment_prompt, default_prompt
+import re  
 
+
+def extract_transformed_text(response):
+    # Use regex to extract text after "修改的输入如下："
+    match = re.search(r'修改的输入如下：(.*)', response, re.DOTALL)
+    if match:
+        transformed_text = match.group(1).strip()
+        return transformed_text
+    else:
+        return "No modified question found"
 
 class ChatboxHandler:
     def __init__(self, llm) -> None:
@@ -23,13 +32,7 @@ class FactQuestionHandler(ChatboxHandler):
         # Logic to handle fact-based questions
         chain = LLMChain(llm=self.llm, prompt=self.fact_prompt, llm_kwargs={"max_new_tokens": 512})
         response = chain.run(user_input)
-        # Use regex to extract text after "修改的问题如下："
-        match = re.search(r'修改的问题如下：(.*)', response, re.DOTALL)
-        if match:
-            transformed_text = match.group(1).strip()
-            return transformed_text
-        else:
-            return "No modified question found"
+        return extract_transformed_text(response)
 
 class CodeQuestionHandler(ChatboxHandler):
     def __init__(self, llm) -> None:
@@ -42,29 +45,62 @@ class CodeQuestionHandler(ChatboxHandler):
         # Logic to handle fact-based questions
         chain = LLMChain(llm=self.llm, prompt=self.code_prompt, llm_kwargs={"max_new_tokens": 512})
         response = chain.run(user_input)
-        # Use regex to extract text after "修改的问题如下："
-        match = re.search(r'修改的问题如下：(.*)', response, re.DOTALL)
-        if match:
-            transformed_text = match.group(1).strip()
-            return transformed_text
-        else:
-            return "No modified question found"
+        # Use regex to extract text after "修改的输入如下："
+        return extract_transformed_text(response)
 
-class DefaultQuestionHandler(ChatboxHandler):
-    def __init__(self, llm) -> None:
+class EntertainmentQuestionHandler(ChatboxHandler):
+    def __init__(self, llm):
         super().__init__(llm)
-        self.default_prompt = ChatPromptTemplate.from_template(
-        """这是一个通用问题。请提出您的问题，我们将尽力提供解答。
-
-        示例问题：
-        "告诉我有趣的历史事件。"
-        """
+        self.entertainment_prompt = ChatPromptTemplate.from_template(
+            entertainment_prompt()
         )
 
     def handle_input(self, user_input):
-        chain = LLMChain(llm=self.llm, prompt=self.default_prompt, llm_kwargs={"max_new_tokens": 512})
+        # Logic to handle entertainment-related questions
+        chain = LLMChain(llm=self.llm, prompt=self.entertainment_prompt, llm_kwargs={"max_new_tokens": 512})
         response = chain.run(user_input)
-        return response
+        return extract_transformed_text(response)
+
+class UtilityQuestionHandler(ChatboxHandler):
+    def __init__(self, llm):
+        super().__init__(llm)
+        self.utility_prompt = ChatPromptTemplate.from_template(
+            utility_prompt()
+        )
+
+    def handle_input(self, user_input):
+        # Logic to handle utility-related questions
+        chain = LLMChain(llm=self.llm, prompt=self.utility_prompt, llm_kwargs={"max_new_tokens": 512})
+        response = chain.run(user_input)
+        return extract_transformed_text(response)
+
+class PersonalQuestionHandler(ChatboxHandler):
+    def __init__(self, llm):
+        super().__init__(llm)
+        self.personal_prompt = ChatPromptTemplate.from_template(
+            personal_prompt()
+        )
+
+    def handle_input(self, user_input):
+        # Logic to handle personal-related questions
+        chain = LLMChain(llm=self.llm, prompt=self.personal_prompt, llm_kwargs={"max_new_tokens": 512})
+        response = chain.run(user_input)
+        return extract_transformed_text(response)
+
+
+
+class DefaultQuestionHandler(ChatboxHandler):
+    def __init__(self, llm):
+        super().__init__(llm)
+        self.personal_prompt = ChatPromptTemplate.from_template(
+            default_prompt()
+        )
+
+    def handle_input(self, user_input):
+        # Logic to handle personal-related questions
+        chain = LLMChain(llm=self.llm, prompt=self.personal_prompt, llm_kwargs={"max_new_tokens": 512})
+        response = chain.run(user_input)
+        return extract_transformed_text(response)
 
 
 def create_chatbox_handler(input_type, llm):
@@ -72,5 +108,13 @@ def create_chatbox_handler(input_type, llm):
         return FactQuestionHandler(llm)
     elif input_type == "code":
         return CodeQuestionHandler(llm)
-    elif input_type == "default":
+    elif input_type == "entertainment":
+        return EntertainmentQuestionHandler(llm)
+    elif input_type == "utility":
+        return UtilityQuestionHandler(llm)
+    elif input_type == "personal":
+        return PersonalQuestionHandler(llm)
+    else:
+        # Default handler for unknown input types
         return DefaultQuestionHandler(llm)
+
