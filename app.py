@@ -137,6 +137,14 @@ default_instruction = """您是一个语言模型提示词撰写专家，你的�
 # ======================================================== #
 # ======================================================== #
 # ======================================================== #
+def extract_transformed_text(response):
+    # Use regex to extract text after "修改的输入如下："
+    match = re.search(r'修改的输入如下：(.*)', response, re.DOTALL)
+    if match:
+        transformed_text = match.group(1).strip()
+        return transformed_text
+    else:
+        return "No modified question found"
 
 if user_input := st.chat_input("What is up?"):
     st.session_state.messages.append({"role": "user", "content": user_input})
@@ -156,5 +164,5 @@ if user_input := st.chat_input("What is up?"):
             st.write("Final Prompt: ")
             # st.write(final_prompt.format(type_instruction = _, user_input=user_input))
             response = chain.predict(type_instruction = _, user_input=user_input)
-        st.markdown(response)
+        st.markdown(extract_transformed_text(response))
     st.session_state.messages.append({"role": "assistant", "content": response})
