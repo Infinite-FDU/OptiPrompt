@@ -107,15 +107,48 @@ init_prompt = ChatPromptTemplate.from_template(
    """
 )
 
+multi_step_init_prompt = ChatPromptTemplate.from_template(
+    """
+    {type_instruction}
+
+    用户输入：
+    {user_input}
+
+    修改的输入如下：
+    你好，AI助手，基于已有问题：{user_input}，我将问题拆分为几步，所以想向你咨询下列问题
+   """
+)
+
 system_message = SystemMessage(content=st.session_state.custom_instruction)
 final_prompt = (system_message + init_prompt)
 chain = LLMChain(llm=llm, prompt=final_prompt)
+
+multi_step_final_prompt = (system_message + multi_step_init_prompt)
+multi_step_chain = LLMChain(llm=llm, prompt=multi_step_final_prompt)
 
 # ======================================================== #
 # ================= Generate Instruction ================= #
 # ======================================================== #
 
-multi_step_instruction = ""
+multi_step_instruction = """
+您是一个语言模型提示词撰写专家，你的工作是为用户优化他们的问题，输出更好的问题，而非回答问题，你修改后的答案将提供给更强大的语言模型，由他们来给出问题的答案。
+        用户的输入可能涉及一个复杂的问题，如果直接让语言模型回答这个问题效果并不好。所以请你思考：如果解决这个问题可以分为哪些子问题？并且将每个小问题作为优化过的问题输出。
+        优化过的问题将以“你好，AI助手，基于已有问题%原有问题%，我将问题拆分为几个小问题，所以想向你咨询下列问题：”，以“请逐个回答上述问题，一步步思考。”结尾。
+
+        例子：
+        输入：
+        如何使用语言模型？
+
+        修改后的输入：
+        你好，AI助手，基于已有问题“如何使用语言模型？”，我将问题拆分为几步，所以想向你咨询下列问题：\n1.如何获取语言模型的使用资格？\n2.如何学习语言模型的使用方法？\n3.如何熟练掌握语言模型的使用\n请逐个回答上述问题，一步步思考。
+
+        例子：
+        输入：
+        如何赚到100万？
+
+        修改后的输入：
+        你好，AI助手，基于已有问题“如何赚到100万？”，我将问题拆分为几步，所以想向你咨询下列问题：1.如何找到一份高薪的工作？\n2. 如何提高自己的技能和知识水平以获得更高薪资？\n3. 如何合理规划财务以实现财富增值？\n4. 在什么行业或领域中更容易赚取百万以上的收入？\n5. 如何在职场上建立良好的人际关系从而提升个人价值？
+        """
 
 code_instruction = """您是一个代码优化AI助手。
         请修改并优化以下代码问题，以使其更明确和清晰。请确保提供足够的上下文信息和详细描述，以便更好地回答问题。如果你的答案包括代码，用markdown格式展示代码部分。
@@ -171,15 +204,18 @@ if user_input := st.chat_input("What is up?"):
             # response = handler.handle_input(user_input)
             if (user_input_type == "default"):
                 _ = default_instruction
-            elif (user_input_type == "multi-step"):
-                _ = multi_step_instruction
+                response = chain.predict(type_instruction=_, user_input=user_input)
             elif (user_input_type == "code"):
                 _ = code_instruction
+                response = chain.predict(type_instruction=_, user_input=user_input)
             elif (user_input_type == "judge"):
                 _ = judge_instruction
-            st.write("Final Prompt: ")
+                response = chain.predict(type_instruction=_, user_input=user_input)
+            elif (user_input_type == "multi-step"):
+                _ = multi_step_instruction
+                response = multi_step_chain.predict(type_instruction=_, user_input=user_input)
+            # st.write("Final Prompt: ")
             # st.write(final_prompt.format(type_instruction = _, user_input=user_input))
-            response = chain.predict(type_instruction=_, user_input=user_input)
         st.markdown(extract_transformed_text(response))
     st.session_state.messages.append(
         {"role": "assistant", "content": response})
