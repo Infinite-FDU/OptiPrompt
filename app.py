@@ -1,28 +1,34 @@
 # app.py
 import streamlit as st
-from handlers import create_chatbox_handler
 from bigdl.llm.langchain.llms import TransformersLLM
 from langchain.prompts import ChatPromptTemplate
 from langchain.chains import LLMChain
-from langchain.schema import SystemMessage  
+from langchain.schema import SystemMessage
 
 
 import re
-import time
+import os
 
 st.set_page_config(
     page_title="Infinit FDU Chatbot",
-    page_icon="👋",
+    page_icon=":ringed_planet:",
+    menu_items={
+        'Get help': 'https://github.com/Infinite-FDU/BigDL',
+        'Report a bug': "https://github.com/Infinite-FDU/BigDL/issues",
+        'About': "# Something about this app"
+    }
 )
 
-st.title("Infinit FDU Chatbot")
+st.title(":bird: Infinit FDU Chatbot")
 
 # TODO:
 #  1. Let user input a custom instruction
 #  2. Store this instruction in a local txt file
-#  3. 
+#  3.
 
 # Use cache to load model, no need to reload after web rerun
+
+
 @st.cache_resource
 def load_transformers_llm(model_name):
     # Define the base folder path
@@ -35,7 +41,7 @@ def load_transformers_llm(model_name):
         llm = TransformersLLM.from_model_id_low_bit(
             model_id=model_path,
             model_kwargs={"temperature": 0.2, "trust_remote_code": True},
-            
+
         )
 
     return llm
@@ -44,14 +50,21 @@ def load_transformers_llm(model_name):
 # config sidebar
 with st.sidebar:
     model_name = st.selectbox('Choose local model',
-        ("Baichuan-13B-Chat", ""),
-        placeholder="Select...",)
+                              ("Baichuan-13B-Chat", ""),
+                              placeholder="Select...",)
     st.write("Model name:", model_name)
-    user_input_type = st.radio("Select input type", ["multi-step", "code", "default"], index=None)
+    user_input_type = st.radio("Select input type", [
+                               "multi-step", "judge", "code", "default"], index=None)
+
+    file_path = "system_message.txt"
+    if os.path.exists(file_path):
+        # If the file exists, read its contents and store it in a string
+        with open(file_path, "r") as file:
+            local_system_message = file.read()
 
     with st.form("Customize instruction"):
-        custom_instruction = st.text_area("Customize instructions :sunglasses:", max_chars=500,
-                                   )
+        custom_instruction = st.text_area("Customize instructions :sunglasses:", value=local_system_message, max_chars=500,
+                                          )
         st.session_state.custom_instruction = custom_instruction
         submitted = st.form_submit_button("Submit")
     if submitted:
@@ -83,7 +96,7 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 init_prompt = ChatPromptTemplate.from_template(
-   """
+    """
     {type_instruction}
 
     用户输入：
@@ -137,6 +150,8 @@ default_instruction = """您是一个语言模型提示词撰写专家，你的�
 # ======================================================== #
 # ======================================================== #
 # ======================================================== #
+
+
 def extract_transformed_text(response):
     # Use regex to extract text after "修改的输入如下："
     match = re.search(r'修改的输入如下：(.*)', response, re.DOTALL)
@@ -145,6 +160,7 @@ def extract_transformed_text(response):
         return transformed_text
     else:
         return "No modified question found"
+
 
 if user_input := st.chat_input("What is up?"):
     st.session_state.messages.append({"role": "user", "content": user_input})
@@ -163,6 +179,7 @@ if user_input := st.chat_input("What is up?"):
                 _ = judge_instruction
             st.write("Final Prompt: ")
             # st.write(final_prompt.format(type_instruction = _, user_input=user_input))
-            response = chain.predict(type_instruction = _, user_input=user_input)
+            response = chain.predict(type_instruction=_, user_input=user_input)
         st.markdown(extract_transformed_text(response))
-    st.session_state.messages.append({"role": "assistant", "content": response})
+    st.session_state.messages.append(
+        {"role": "assistant", "content": response})
