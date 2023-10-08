@@ -9,6 +9,7 @@ from langchain.schema import SystemMessage
 import re
 import os
 
+# Configure the Streamlit page with custom settings
 st.set_page_config(
     page_title="Infinit FDU Chatbot",
     page_icon=":ringed_planet:",
@@ -20,13 +21,6 @@ st.set_page_config(
 )
 
 st.title(":bird: Infinit FDU Chatbot")
-
-# TODO:
-#  1. Let user input a custom instruction
-#  2. Store this instruction in a local txt file
-#  3.
-
-# Use cache to load model, no need to reload after web rerun
 
 
 @st.cache_resource
@@ -50,42 +44,46 @@ def load_transformers_llm(model_name):
 if "custom_instruction" not in st.session_state:
     st.session_state.custom_instruction = ""
 
-# config sidebar
+# Create a sidebar section in the Streamlit app for user configuration
 with st.sidebar:
-    model_name = st.selectbox('Choose local model',
-                              ("Baichuan-13B-Chat", ""),
-                              placeholder="Select...",)
+    # Create a selectbox to choose a local model with default options
+    model_name = st.selectbox('Choose local model', ("Baichuan-13B-Chat", ""), placeholder="Select...")
     st.write("Model name:", model_name)
-    user_input_type = st.radio("Select input type", [
-                               "multi-step", "judge", "code", "default"], index=None)
-
+    
+    # Create a radio button group for selecting input types
+    user_input_type = st.radio("Select input type", ["multi-step", "judge", "code", "default"], index=None)
+    
     file_path = "system_message.txt"
+    # Check if the system message text file exists
     if os.path.exists(file_path):
         # If the file exists, read its contents and store it in a string
         with open(file_path, "r") as file:
             local_system_message = file.read()
-            st.session_state.custom_instruction = local_system_message
-
+    else:
+        local_system_message = ""
+    st.session_state.custom_instruction = local_system_message
+    
+    # Create a form for customizing instructions
     with st.form("Customize instruction"):
-        custom_instruction = st.text_area("Customize instructions :sunglasses:", value=local_system_message, max_chars=500,
-                                          )
+        custom_instruction = st.text_area("Customize instructions :sunglasses:", value=local_system_message, max_chars=500)
+        # Store the customized instruction in the session state
         st.session_state.custom_instruction = custom_instruction
         submitted = st.form_submit_button("Submit")
+    
+    # If the form is submitted, save the customized instruction to the system message text file
     if submitted:
         with open("system_message.txt", "w") as file:
-            # Write the system message to the file
             file.write(custom_instruction)
         st.toast('Your instruction was saved!')
 
 
-# load llm
+
+# Load the selected Transformers LLM (Language Model) based on the chosen model name
 llm = load_transformers_llm(model_name)
-# set handler
-# handler = create_chatbox_handler(user_input_type, llm)
 st.success("Model " + model_name + " loaded, enjoy your journey")
 
 
-# chatbox memory
+# Display chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -94,7 +92,7 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 # ======================================================== #
-# ================== Define prompt frame ================= #
+# ================ Generate initial prompt =============== #
 # ======================================================== #
 
 init_prompt = ChatPromptTemplate.from_template(
@@ -123,7 +121,7 @@ multi_step_init_prompt = ChatPromptTemplate.from_template(
 )
 
 # ======================================================== #
-# ==================== Generate Chain ==================== #
+# ==================== Generate Chains =================== #
 # ======================================================== #
 
 system_message = SystemMessage(content=st.session_state.custom_instruction)
@@ -134,7 +132,7 @@ multi_step_final_prompt = (system_message + multi_step_init_prompt)
 multi_step_chain = LLMChain(llm=llm, prompt=multi_step_final_prompt)
 
 # ======================================================== #
-# ================= Generate Instruction ================= #
+# ================= Generate Instructions ================ #
 # ======================================================== #
 
 multi_step_instruction = """
@@ -189,13 +187,17 @@ default_instruction = """您是一个语言模型提示词撰写专家，你的�
         例子：\n问题输入$复旦 哲学系$\n问题输出$你好，AI助手！我想向你咨询一下问题：复旦哲学系专业实力怎么样？请为我介绍其概括。$\n问题输入$长城再哪里$\n问题输出$你好，AI助手！我想向你咨询一下问题：长城在哪里$\n问题输入$container复数$\n问题输出$你好，AI助手！我想向你咨询一下问题：英语单词container的复数形式是什么$
         """
 
-# ======================================================== #
-# ======================================================== #
-# ======================================================== #
 
+def extract_transformed_text(response: str) -> str:
+    """
+    Extracts the transformed text from the response.
 
-def extract_transformed_text(response):
-    """Extract the transformed text from the response"""
+    Args:
+        response (str): The response from the language model.
+
+    Returns:
+        str: The extracted transformed text.
+    """
     # Use regex to extract text after "修改的输入如下："
     match = re.search(r'修改的输入如下：(.*)', response, re.DOTALL)
     if match:
@@ -203,6 +205,7 @@ def extract_transformed_text(response):
         return transformed_text
     else:
         return "No modified question found"
+
 
 
 if user_input := st.chat_input("What is up?"):
@@ -228,9 +231,6 @@ if user_input := st.chat_input("What is up?"):
                 _ = multi_step_instruction
                 response = multi_step_chain.predict(
                     type_instruction=_, user_input=user_input)
-                print(response)
-            # st.write("Final Prompt: ")
-            # st.write(final_prompt.format(type_instruction = _, user_input=user_input))
         extracted_response = extract_transformed_text(response)
         st.markdown(extracted_response)
     st.session_state.messages.append(
