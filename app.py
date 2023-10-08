@@ -47,6 +47,9 @@ def load_transformers_llm(model_name):
     return llm
 
 
+if "custom_instruction" not in st.session_state:
+    st.session_state.custom_instruction = ""
+
 # config sidebar
 with st.sidebar:
     model_name = st.selectbox('Choose local model',
@@ -61,6 +64,7 @@ with st.sidebar:
         # If the file exists, read its contents and store it in a string
         with open(file_path, "r") as file:
             local_system_message = file.read()
+            st.session_state.custom_instruction = local_system_message
 
     with st.form("Customize instruction"):
         custom_instruction = st.text_area("Customize instructions :sunglasses:", value=local_system_message, max_chars=500,
@@ -80,12 +84,6 @@ llm = load_transformers_llm(model_name)
 # handler = create_chatbox_handler(user_input_type, llm)
 st.success("Model " + model_name + " loaded, enjoy your journey")
 
-if "first_deployment" not in st.session_state:
-    st.session_state.first_deployment = True
-
-if "custom_instruction" not in st.session_state:
-    st.session_state.custom_instruction = ""
-
 
 # chatbox memory
 if "messages" not in st.session_state:
@@ -94,6 +92,10 @@ if "messages" not in st.session_state:
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
+
+# ======================================================== #
+# ================== Define prompt frame ================= #
+# ======================================================== #
 
 init_prompt = ChatPromptTemplate.from_template(
     """
@@ -116,8 +118,13 @@ multi_step_init_prompt = ChatPromptTemplate.from_template(
 
     修改的输入如下：
     你好，AI助手，基于已有问题：{user_input}，我将问题拆分为几步，所以想向你咨询下列问题
+
    """
 )
+
+# ======================================================== #
+# ==================== Generate Chain ==================== #
+# ======================================================== #
 
 system_message = SystemMessage(content=st.session_state.custom_instruction)
 final_prompt = (system_message + init_prompt)
@@ -170,7 +177,8 @@ judge_instruction = """你是一个语言模型提示词评分大师，用户将
     4分-问题较大。
     2分-需要重写。
 
-    请赖你的专业知识，给出你的评分，请不要给出过高的评分，你需要严格一些，将评分放在方括号中，之后你可以加上建议。例如：[8.5]，评分范围为0-10分，小数点后保留一位小数。"""
+    请赖你的专业知识，给出你的评分，请不要给出过高的评分，你需要严格一些，将评分放在方括号中，之后你可以加上建议。例如：[8.5]，评分范围为0-10分，小数点后保留一位小数。
+    """
 
 default_instruction = """您是一个语言模型提示词撰写专家，你的工作是为用户优化他们的问题，输出更好的问题，而非回答问题，你修改后的答案将提供给更强大的语言模型，由他们来给出问题的答案。
         接下来，用户会向你提供一个问题，你需要将问题修改为更好的问题输出，请注意输出的问题不针对用户，不是对于用户需求的再度确认，而站在用户视角可以用于向更强大的语言模型提问。
@@ -178,7 +186,8 @@ default_instruction = """您是一个语言模型提示词撰写专家，你的�
 
         你的回答将以$你好，AI助手，我想向你咨询一下问题：$开头。请以问号作为你输出的结尾。\n
 
-        例子：\n问题输入$复旦 哲学系$\n问题输出$你好，AI助手！我想向你咨询一下问题：复旦哲学系专业实力怎么样？请为我介绍其概括。$\n问题输入$长城再哪里$\n问题输出$你好，AI助手！我想向你咨询一下问题：长城在哪里$\n问题输入$container复数$\n问题输出$你好，AI助手！我想向你咨询一下问题：英语单词container的复数形式是什么$"""
+        例子：\n问题输入$复旦 哲学系$\n问题输出$你好，AI助手！我想向你咨询一下问题：复旦哲学系专业实力怎么样？请为我介绍其概括。$\n问题输入$长城再哪里$\n问题输出$你好，AI助手！我想向你咨询一下问题：长城在哪里$\n问题输入$container复数$\n问题输出$你好，AI助手！我想向你咨询一下问题：英语单词container的复数形式是什么$
+        """
 
 # ======================================================== #
 # ======================================================== #
@@ -186,6 +195,7 @@ default_instruction = """您是一个语言模型提示词撰写专家，你的�
 
 
 def extract_transformed_text(response):
+    """Extract the transformed text from the response"""
     # Use regex to extract text after "修改的输入如下："
     match = re.search(r'修改的输入如下：(.*)', response, re.DOTALL)
     if match:
@@ -204,18 +214,24 @@ if user_input := st.chat_input("What is up?"):
             # response = handler.handle_input(user_input)
             if (user_input_type == "default"):
                 _ = default_instruction
-                response = chain.predict(type_instruction=_, user_input=user_input)
+                response = chain.predict(
+                    type_instruction=_, user_input=user_input)
             elif (user_input_type == "code"):
                 _ = code_instruction
-                response = chain.predict(type_instruction=_, user_input=user_input)
+                response = chain.predict(
+                    type_instruction=_, user_input=user_input)
             elif (user_input_type == "judge"):
                 _ = judge_instruction
-                response = chain.predict(type_instruction=_, user_input=user_input)
+                response = chain.predict(
+                    type_instruction=_, user_input=user_input)
             elif (user_input_type == "multi-step"):
                 _ = multi_step_instruction
-                response = multi_step_chain.predict(type_instruction=_, user_input=user_input)
+                response = multi_step_chain.predict(
+                    type_instruction=_, user_input=user_input)
+                print(response)
             # st.write("Final Prompt: ")
             # st.write(final_prompt.format(type_instruction = _, user_input=user_input))
-        st.markdown(extract_transformed_text(response))
+        extracted_response = extract_transformed_text(response)
+        st.markdown(extracted_response)
     st.session_state.messages.append(
-        {"role": "assistant", "content": response})
+        {"role": "assistant", "content": extracted_response})
