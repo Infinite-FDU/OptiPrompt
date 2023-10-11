@@ -57,7 +57,7 @@ with st.sidebar:
 
     # Create a radio button group for selecting input types
     user_input_type = st.radio("Select input type", [
-                               "multi-step", "judge", "code", "default"], index=None)
+                               "multi-step", "judge", "code", "default"], index=3)
 
     file_path = "system_message.txt"
     # Check if the system message text file exists
@@ -264,6 +264,7 @@ if user_input := st.chat_input("What is up?"):
                     type_instruction=_, user_input=user_input)
             else:
                 st.warning("Please select an input type", icon = "🚨")
+                st.stop()
         extracted_response = extract_transformed_text(response)
         logging.info("extracted_response: " + extracted_response)
         response_newlines = extracted_response.replace('\n', '\n\n')
