@@ -87,7 +87,7 @@ logging.info("Exit side bar")
 
 # Load the selected Transformers LLM (Language Model) based on the chosen model name
 llm = load_transformers_llm(model_name)
-st.success("Model " + model_name + " loaded, enjoy your journey")
+st.success( model_name + " loaded, enjoy your journey! :laugh:")
 
 logging.info("Transformers LLM loaded")
 
@@ -99,6 +99,7 @@ if "messages" not in st.session_state:
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
+
 
 logging.info("Chat history displayed")
 
@@ -261,9 +262,11 @@ if user_input := st.chat_input("What is up?"):
                 _ = multi_step_instruction
                 response = multi_step_chain.predict(
                     type_instruction=_, user_input=user_input)
-        logging.info("response: " + response)
+            else:
+                st.warning("Please select an input type", icon = "🚨")
         extracted_response = extract_transformed_text(response)
         logging.info("extracted_response: " + extracted_response)
-        st.write(extracted_response)
+        response_newlines = extracted_response.replace('\n', '\n\n')
+        st.markdown(response_newlines)
     st.session_state.messages.append(
-        {"role": "assistant", "content": extracted_response})
+        {"role": "assistant", "content": response_newlines})
