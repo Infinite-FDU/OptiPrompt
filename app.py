@@ -22,10 +22,20 @@ st.set_page_config(
         'About': "# Something about this app"
     }
 )
+
+# Handle download
+output_file_name = "chat_history.md"
+user_prefix = "Human:"
+ai_prefix = "AI:"
+delimiter = "***"
+
+if not os.path.exists(output_file_name):
+    with open(output_file_name, "w") as file:
+        file.write("# Chat History\n")
+        file.write(delimiter + "\n")
+
 st.title(":bird: Infinit FDU Chatbot")
-
 logging.info("Streamlit page configured")
-
 
 @st.cache_resource
 def load_transformers_llm(model_name):
@@ -82,6 +92,8 @@ with st.sidebar:
         with open("system_message.txt", "w") as file:
             file.write(custom_instruction)
         st.toast('Your instruction was saved!')
+    
+    
 
 logging.info("Exit side bar")
 
@@ -238,6 +250,8 @@ def extract_transformed_text(response: str) -> str:
         return "No modified question found"
 
 
+
+
 logging.info("User input begins")
 if user_input := st.chat_input("What is up?"):
     st.session_state.messages.append({"role": "user", "content": user_input})
@@ -269,5 +283,21 @@ if user_input := st.chat_input("What is up?"):
         logging.info("extracted_response: " + extracted_response)
         response_newlines = extracted_response.replace('\n', '\n\n')
         st.markdown(response_newlines)
+
+        # Manage outputfile
+        with open(output_file_name, "a") as file:
+            file.write(user_prefix + " " + user_input + "\n")
+            file.write(ai_prefix + " " + response_newlines + "\n")
+            file.write(delimiter + "\n")
     st.session_state.messages.append(
         {"role": "assistant", "content": response_newlines})
+
+
+# Create a button for downloading the image
+    with open(output_file_name, "r") as file:
+        btn = st.download_button(
+            label=":file_folder:",
+            data=file,
+            file_name=output_file_name,
+            use_container_width = True
+          )
