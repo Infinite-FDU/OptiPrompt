@@ -99,7 +99,7 @@ logging.info("Exit side bar")
 
 # Load the selected Transformers LLM (Language Model) based on the chosen model name
 llm = load_transformers_llm(model_name)
-st.success( model_name + " loaded, enjoy your journey! :laugh:")
+st.success( model_name + " loaded, enjoy your journey!")
 
 logging.info("Transformers LLM loaded")
 
@@ -292,7 +292,7 @@ if user_input := st.chat_input("What is up?"):
     st.session_state.messages.append(
         {"role": "assistant", "content": response_newlines})
 
-
+with st.sidebar:
 # Create a button for downloading the image
     with open(output_file_name, "r") as file:
         btn = st.download_button(
