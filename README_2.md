@@ -138,6 +138,7 @@ conda activate infinite-fdu
 2. Navigate to the project directory
 3. Install the project dependencies from the `requirements.txt` file:
    ```bash
+   pip install --pre --upgrade bigdl-llm[all]
    pip install -r requirements.txt
    ```
 
