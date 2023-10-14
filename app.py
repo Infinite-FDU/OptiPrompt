@@ -36,6 +36,7 @@ if not os.path.exists(output_file_name):
 st.title(":bird: Infinit FDU Chatbot")
 logging.info("Streamlit page configured")
 
+
 @st.cache_resource
 def load_transformers_llm(model_name):
     # Define the base folder path
@@ -91,14 +92,13 @@ with st.sidebar:
         with open("system_message.txt", "w") as file:
             file.write(custom_instruction)
         st.toast('Your instruction was saved!')
-    
-    
+
 
 logging.info("Exit side bar")
 
 # Load the selected Transformers LLM (Language Model) based on the chosen model name
 llm = load_transformers_llm(model_name)
-st.success( model_name + " loaded, enjoy your journey! :laugh:")
+st.success(model_name + " loaded, enjoy your journey! :laugh:")
 
 logging.info("Transformers LLM loaded")
 
@@ -249,8 +249,6 @@ def extract_transformed_text(response: str) -> str:
         return "No modified question found"
 
 
-
-
 logging.info("User input begins")
 if user_input := st.chat_input("What is up?"):
     st.session_state.messages.append({"role": "user", "content": user_input})
@@ -272,7 +270,7 @@ if user_input := st.chat_input("What is up?"):
                 response = multi_step_chain.predict(
                     type_instruction=multi_step_instruction, user_input=user_input)
             else:
-                st.warning("Please select an input type", icon = "🚨")
+                st.warning("Please select an input type", icon="🚨")
                 st.stop()
         extracted_response = extract_transformed_text(response)
         logging.info("extracted_response: " + extracted_response)
@@ -294,5 +292,5 @@ if user_input := st.chat_input("What is up?"):
             label=":file_folder:",
             data=file,
             file_name=output_file_name,
-            use_container_width = True
-          )
+            use_container_width=True
+        )
