@@ -32,7 +32,6 @@ delimiter = "***"
 if not os.path.exists(output_file_name):
     with open(output_file_name, "w") as file:
         file.write("# Chat History\n")
-        file.write(delimiter + "\n")
 
 st.title(":bird: Infinit FDU Chatbot")
 logging.info("Streamlit page configured")
@@ -67,7 +66,7 @@ with st.sidebar:
 
     # Create a radio button group for selecting input types
     user_input_type = st.radio("Select input type", [
-                               "multi-step", "judge", "code", "default"], index=3)
+                               "multi-step", "judge", "default"], index=3)
 
     file_path = "system_message.txt"
     # Check if the system message text file exists
@@ -261,21 +260,17 @@ if user_input := st.chat_input("What is up?"):
         with st.spinner("Wait for it..."):
             logging.info("Calling chains")
             if (user_input_type == "default"):
-                _ = default_instruction
                 response = chain.predict(
-                    type_instruction=_, user_input=user_input)
+                    type_instruction=default_instruction, user_input=user_input)
             elif (user_input_type == "code"):
-                _ = code_instruction
                 response = chain.predict(
-                    type_instruction=_, user_input=user_input)
+                    type_instruction=code_instruction, user_input=user_input)
             elif (user_input_type == "judge"):
-                _ = judge_instruction
                 response = chain.predict(
-                    type_instruction=_, user_input=user_input)
+                    type_instruction=judge_instruction, user_input=user_input)
             elif (user_input_type == "multi-step"):
-                _ = multi_step_instruction
                 response = multi_step_chain.predict(
-                    type_instruction=_, user_input=user_input)
+                    type_instruction=multi_step_instruction, user_input=user_input)
             else:
                 st.warning("Please select an input type", icon = "🚨")
                 st.stop()
