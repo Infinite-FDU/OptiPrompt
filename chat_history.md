@@ -23,3 +23,8 @@ AI: 你好，AI助手，基于已有问题：怎么买车子？，我将问题拆分为几步，所以想向你咨询
 
 请逐个回答上述问题，一步步思考。
 ***
+Human: That's how much I feel your love! I live for you love.
+AI: 你好，AI助手，我想向你咨询一下问题：
+
+"That's how much I feel your love! I live for your love." 这句话中包含了哪些情感表达？
+***
