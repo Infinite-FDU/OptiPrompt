@@ -104,7 +104,7 @@ Before getting started with the project, ensure that you have the following prer
 - **Python 3.10**: You'll need Python 3.10 to run this project. We recommend using Anaconda to manage your Python environments. You can create a Python 3.10 environment with the following command:
 
 ```bash
-conda create -n infinite-fdu python=3.10
+conda create -n infinite-fdu python=3.9
 ```
 
 Activate the environment using:
@@ -145,7 +145,7 @@ If your GPU is not CUDA-compatible or you encounter issues with CUDA, **remove t
 
 ## Prompt Engineering Overview
 
-Welcome to the Infinit FDU Chatbot, your intelligent assistant for prompt engineering. As a prompt engineer, your role is to craft and refine prompts to elicit precise and meaningful responses from language models. This chatbot offers a range of optimization options to assist you in your task.
+Welcome to the OptiPrompt, your intelligent assistant for prompt engineering. As a prompt engineer, your role is to craft and refine prompts to elicit precise and meaningful responses from language models. This chatbot offers a range of optimization options to assist you in your task.
 
 ### 1. Default Optimization
 
@@ -168,11 +168,11 @@ Welcome to the Infinit FDU Chatbot, your intelligent assistant for prompt engine
 - **Optimized Output:** _The chatbot will break down your question into manageable parts, perfect for step-by-step exploration._
 
 
-With the Infinit FDU Chatbot, you can fine-tune prompts, code, and questions to achieve the best results from language models. Optimize, evaluate, and engineer prompts with ease!
+**Note:** This project has been tested using artificial intelligence, Claude, for prompt optimization. It compares user inputs to optimized inputs and achieves a perfect score in **39 out of 39 tests.** For detailed information, please refer to the "test_default.ipynb" and "output.json" files.
 
 ## Custom Instructions for Persistent Memory
 
-The Infinit FDU Chatbot empowers you with the ability to provide custom instructions, allowing you to whisper specific guidance to the language model. These custom instructions serve as a form of persistent memory, influencing the behavior of the chatbot across different sessions.
+The OptiPrompt empowers you with the ability to provide custom instructions, allowing you to whisper specific guidance to the language model. These custom instructions serve as a form of persistent memory, influencing the behavior of the chatbot across different sessions.
 
 ### How Custom Instructions Work
 
@@ -186,7 +186,7 @@ The Infinit FDU Chatbot empowers you with the ability to provide custom instruct
 
 ### Enhance Your Conversations
 
-Custom instructions provide a powerful way to tailor your interactions with the Infinit FDU Chatbot. Whether you want to fine-tune responses, shape the conversation, or achieve specific outcomes, your instructions serve as a valuable resource for persistent memory and guidance.
+Custom instructions provide a powerful way to tailor your interactions with the OptiPrompt. Whether you want to fine-tune responses, shape the conversation, or achieve specific outcomes, your instructions serve as a valuable resource for persistent memory and guidance.
 
 Harness the potential of custom instructions to create more meaningful and personalized conversations with the chatbot, making it a truly adaptable assistant that understands your unique requirements.
 
@@ -246,7 +246,7 @@ CONTRIBUTING -->
 
 # Contributing
 
-🎉 We welcome contributions from the community! If you'd like to get involved and help improve the Infinit FDU Chatbot project, here's how you can contribute:
+🎉 We welcome contributions from the community! If you'd like to get involved and help improve the OptiPrompt project, here's how you can contribute:
 
 1. **Bug Reports:** If you encounter any issues while using the app, please [submit a bug report](https://github.com/Infinite-FDU/BigDL/issues) on our GitHub repository. Be sure to include as many details as possible, including screenshots and steps to reproduce the problem.
 
@@ -260,7 +260,7 @@ CONTRIBUTING -->
     - 📧 **Email 2:** [contributor2@example.com](mailto:contributor2@example.com)
     - 📧 **Email 3:** [contributor3@example.com](mailto:contributor3@example.com)
 
-We're committed to making this project better with your help, and we appreciate your contributions, large or small. Thank you for being a part of the Infinit FDU Chatbot community!
+We're committed to making this project better with your help, and we appreciate your contributions, large or small. Thank you for being a part of the OptiPrompt community!
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
