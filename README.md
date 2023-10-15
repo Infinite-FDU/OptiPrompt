@@ -10,32 +10,16 @@
 
 
 
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-
 
 <!-- PROJECT LOGO -->
 <br />
-<div align="center">
+<!-- <div align="center">
   <a href="https://github.com/Infinite-FDU/BigDL">
     <img src="images/logo.jpg" alt="Logo" width="80" height="80">
-  </a>
+  </a> -->
 
-<h3 align="center">Infitnite FDU</h3>
-
+<h1 align="center">OptiPrompt</h1>
+<h4 align="center">version 602</h4>
   <p align="center">
     A conversational AI chatbot for enhancing user queries and assisting in generating improved questions.
     <br />
@@ -86,15 +70,15 @@
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
 
-Welcome to the **Infinit FDU Chatbot** project, your gateway to a world of intelligent conversation and assistance! 🤖✨
+Welcome to the **OptiPrompt** project, your gateway to a world of intelligent conversation and assistance! 🤖✨
 
-The **Infinit FDU Chatbot** is an innovative chatbot powered by state-of-the-art natural language processing models. Whether you're seeking answers, code optimization suggestions, or even help with refining your questions, our chatbot is here to assist you effectively. Designed for a variety of use cases, from code optimization to language model guidance, it's your go-to AI assistant.
+The **OptiPrompt** is an innovative chatbot powered by state-of-the-art natural language processing models. Whether you're seeking answers, code optimization suggestions, or even help with refining your questions, our chatbot is here to assist you effectively. Designed for a variety of use cases, from code optimization to language model guidance, it's your go-to AI assistant.
 
 Our project leverages the latest advancements in language modeling technology and provides you with a seamless conversational experience. Engage in productive discussions, refine your queries, and harness the power of AI to enhance your workflow.
 
-Get ready to embark on an exciting journey with the **Infinit FDU Chatbot**. Explore its capabilities, improve your communication, and boost your productivity. It's more than just a chatbot; it's your AI companion in the world of natural language understanding and generation.
+Get ready to embark on an exciting journey with the **OptiPrompt**. Explore its capabilities, improve your communication, and boost your productivity. It's more than just a chatbot; it's your AI companion in the world of natural language understanding and generation.
 
-Start your conversation with the **Infinit FDU Chatbot** today and elevate your interactions to the next level! 🚀🤖
+Start your conversation with the **OptiPrompt** today and elevate your interactions to the next level! 🚀🤖
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -215,7 +199,7 @@ _For more examples, please refer to the [Documentation](https://python.langchain
 <!-- ROADMAP -->
 # Roadmap
 
-## Version 1.0.0 (Initial Release)
+<!-- ## Version 1.0.0 (Initial Release)
 - [x] Streamlit app setup with customizable settings and styling.
 - [x] Integration of Transformers LLM with support for model selection.
 - [x] Four distinct input types: multi-step, judge, code, and default.
@@ -258,7 +242,8 @@ See the [open issues](https://github.com/Infinite-FDU/BigDL/issues) for a full l
 
 
 
-<!-- CONTRIBUTING -->
+CONTRIBUTING -->
+
 # Contributing
 
 🎉 We welcome contributions from the community! If you'd like to get involved and help improve the Infinit FDU Chatbot project, here's how you can contribute:

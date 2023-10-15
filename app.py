@@ -14,7 +14,7 @@ logging.basicConfig(format='%(asctime)s %(message)s',
 
 # Configure the Streamlit page with custom settings
 st.set_page_config(
-    page_title="Infinit FDU Chatbot",
+    page_title="OptiPrompt",
     page_icon=":ringed_planet:",
     menu_items={
         'Get help': 'https://github.com/Infinite-FDU/BigDL',
@@ -34,7 +34,7 @@ if not os.path.exists(output_file_name):
         file.write("# Chat History\n")
         file.write(delimiter + "\n")
 
-st.title(":bird: Infinit FDU Chatbot")
+st.title(":bird: OptiPrompt")
 logging.info("Streamlit page configured")
 
 @st.cache_resource
@@ -67,7 +67,7 @@ with st.sidebar:
 
     # Create a radio button group for selecting input types
     user_input_type = st.radio("Select input type", [
-                               "multi-step", "judge", "code", "default"], index=3)
+                               "multi-step", "judge", "default"], index=2)
 
     file_path = "system_message.txt"
     # Check if the system message text file exists
