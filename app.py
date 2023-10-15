@@ -32,10 +32,10 @@ delimiter = "***"
 if not os.path.exists(output_file_name):
     with open(output_file_name, "w") as file:
         file.write("# Chat History\n")
-        file.write(delimiter + "\n")
 
 st.title(":bird: OptiPrompt")
 logging.info("Streamlit page configured")
+
 
 @st.cache_resource
 def load_transformers_llm(model_name):
@@ -69,6 +69,7 @@ with st.sidebar:
     user_input_type = st.radio("Select input type", [
                                "multi-step", "judge", "default"], index=2)
 
+
     file_path = "system_message.txt"
     # Check if the system message text file exists
     if os.path.exists(file_path):
@@ -92,14 +93,13 @@ with st.sidebar:
         with open("system_message.txt", "w") as file:
             file.write(custom_instruction)
         st.toast('Your instruction was saved!')
-    
-    
+
 
 logging.info("Exit side bar")
 
 # Load the selected Transformers LLM (Language Model) based on the chosen model name
 llm = load_transformers_llm(model_name)
-st.success( model_name + " loaded, enjoy your journey!")
+st.success(model_name + " loaded, enjoy your journey!")
 
 logging.info("Transformers LLM loaded")
 
@@ -250,8 +250,6 @@ def extract_transformed_text(response: str) -> str:
         return "No modified question found"
 
 
-
-
 logging.info("User input begins")
 if user_input := st.chat_input("What is up?"):
     st.session_state.messages.append({"role": "user", "content": user_input})
@@ -261,23 +259,19 @@ if user_input := st.chat_input("What is up?"):
         with st.spinner("Wait for it..."):
             logging.info("Calling chains")
             if (user_input_type == "default"):
-                _ = default_instruction
                 response = chain.predict(
-                    type_instruction=_, user_input=user_input)
+                    type_instruction=default_instruction, user_input=user_input)
             elif (user_input_type == "code"):
-                _ = code_instruction
                 response = chain.predict(
-                    type_instruction=_, user_input=user_input)
+                    type_instruction=code_instruction, user_input=user_input)
             elif (user_input_type == "judge"):
-                _ = judge_instruction
                 response = chain.predict(
-                    type_instruction=_, user_input=user_input)
+                    type_instruction=judge_instruction, user_input=user_input)
             elif (user_input_type == "multi-step"):
-                _ = multi_step_instruction
                 response = multi_step_chain.predict(
-                    type_instruction=_, user_input=user_input)
+                    type_instruction=multi_step_instruction, user_input=user_input)
             else:
-                st.warning("Please select an input type", icon = "🚨")
+                st.warning("Please select an input type", icon="🚨")
                 st.stop()
         extracted_response = extract_transformed_text(response)
         logging.info("extracted_response: " + extracted_response)
@@ -299,5 +293,5 @@ with st.sidebar:
             label=":file_folder:",
             data=file,
             file_name=output_file_name,
-            use_container_width = True
-          )
+            use_container_width=True
+        )
