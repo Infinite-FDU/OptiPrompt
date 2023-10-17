@@ -125,6 +125,8 @@ simple_prompt = ChatPromptTemplate.from_template(
 
 用户输入：
 {user_input}
+
+我的回答：
 """
 )
 
@@ -281,7 +283,7 @@ if user_input := st.chat_input("What is up?"):
             elif (user_input_type == "judge"):
                 response = judge_chain.predict(
                     type_instruction=judge_instruction, user_input=user_input)
-                extracted_response = extract_transformed_text(response, "小数点后保留一位小数。")
+                extracted_response = extract_transformed_text(response, "我的回答：")
             elif (user_input_type == "multi-step"):
                 response = multi_step_chain.predict(
                     type_instruction=multi_step_instruction, user_input=user_input)
