@@ -119,6 +119,15 @@ logging.info("Chat history displayed")
 # ================ Generate initial prompt =============== #
 # ======================================================== #
 
+simple_prompt = ChatPromptTemplate.from_template(
+    """
+{type_instruction}
+
+用户输入：
+{user_input}
+"""
+)
+
 init_prompt = ChatPromptTemplate.from_template(
     """
 {type_instruction}
@@ -143,18 +152,6 @@ multi_step_init_prompt = ChatPromptTemplate.from_template(
 """
 )
 
-# ======================================================== #
-# ==================== Generate Chains =================== #
-# ======================================================== #
-
-system_message = SystemMessage(content=st.session_state.custom_instruction)
-final_prompt = (system_message + init_prompt)
-chain = LLMChain(llm=llm, prompt=final_prompt)
-
-multi_step_final_prompt = (system_message + multi_step_init_prompt)
-multi_step_chain = LLMChain(llm=llm, prompt=multi_step_final_prompt)
-
-logging.info("Chains are ready")
 
 # ======================================================== #
 # ================= Generate Instructions ================ #
@@ -208,7 +205,8 @@ judge_instruction = """你是一个语言模型提示词评分大师，用户将
 4分-问题较大。
 2分-需要重写。
 
-请依赖你的专业知识，给出你的评分，请不要给出过高的评分，你需要严格一些，将评分放在方括号中，之后你可以加上建议。例如：[8.5]，评分范围为0-10分，小数点后保留一位小数。
+请依赖你的专业知识，给出你的评分，请不要给出过高的评分，你需要严格一些，将评分放在方括号中，之后你可以加上评分理由和建议。例如：[8.5]，评分范围为0-10分，小数点后保留一位小数。
+
 """
 
 default_instruction = """您是一个语言模型提示词撰写专家，你的工作是为用户优化他们的问题，输出更好的问题，而非回答问题，你修改后的答案将提供给更强大的语言模型，由他们来给出问题的答案。
@@ -230,24 +228,42 @@ default_instruction = """您是一个语言模型提示词撰写专家，你的�
 问题输出你好，AI助手！我想向你咨询一下问题：英语单词container的复数形式是什么
 """
 
+# ======================================================== #
+# ==================== Generate Chains =================== #
+# ======================================================== #
 
-def extract_transformed_text(response: str) -> str:
+system_message = SystemMessage(content=st.session_state.custom_instruction)
+
+final_prompt = (system_message + init_prompt)
+chain = LLMChain(llm=llm, prompt=final_prompt)
+
+multi_step_final_prompt = (system_message + multi_step_init_prompt)
+multi_step_chain = LLMChain(llm=llm, prompt=multi_step_final_prompt)
+
+judge_final_prompt = (system_message + simple_prompt)
+judge_chain = LLMChain(llm=llm, prompt=judge_final_prompt)
+
+logging.info("Chains are ready")
+
+def extract_transformed_text(response: str, to_extract: str) -> str:
     """
-    Extracts the transformed text from the response.
+    Extracts the transformed text from the response based on a specified string.
 
     Args:
         response (str): The response from the language model.
+        to_extract (str): The string to look for in the response.
 
     Returns:
         str: The extracted transformed text.
     """
-    # Use regex to extract text after "修改的输入如下："
-    match = re.search(r'修改的输入如下：(.*)', response, re.DOTALL)
+    # Use regex to extract text after the specified string
+    match = re.search(f'{to_extract}(.*)', response, re.DOTALL)
     if match:
         transformed_text = match.group(1).strip()
         return transformed_text
     else:
         return "No modified question found"
+
 
 
 logging.info("User input begins")
@@ -261,25 +277,26 @@ if user_input := st.chat_input("What is up?"):
             if (user_input_type == "default"):
                 response = chain.predict(
                     type_instruction=default_instruction, user_input=user_input)
-            elif (user_input_type == "code"):
-                response = chain.predict(
-                    type_instruction=code_instruction, user_input=user_input)
+                extracted_response = extract_transformed_text(response, "修改的输入如下：")
             elif (user_input_type == "judge"):
-                response = chain.predict(
+                response = judge_chain.predict(
                     type_instruction=judge_instruction, user_input=user_input)
+                extracted_response = extract_transformed_text(response, "小数点后保留一位小数。")
             elif (user_input_type == "multi-step"):
                 response = multi_step_chain.predict(
                     type_instruction=multi_step_instruction, user_input=user_input)
+                extracted_response = extract_transformed_text(response, "修改的输入如下：")
             else:
                 st.warning("Please select an input type", icon="🚨")
                 st.stop()
-        extracted_response = extract_transformed_text(response)
+        
         logging.info("extracted_response: " + extracted_response)
         response_newlines = extracted_response.replace('\n', '\n\n')
         st.markdown(response_newlines)
 
         # Manage outputfile
         with open(output_file_name, "a") as file:
+            file.write("**" + user_input_type + "|** ")
             file.write(user_prefix + " " + user_input + "\n")
             file.write(ai_prefix + " " + response_newlines + "\n")
             file.write(delimiter + "\n")
