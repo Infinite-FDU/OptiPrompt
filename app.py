@@ -17,9 +17,9 @@ st.set_page_config(
     page_title="OptiPrompt",
     page_icon=":ringed_planet:",
     menu_items={
-        'Get help': 'https://github.com/Infinite-FDU/BigDL',
-        'Report a bug': "https://github.com/Infinite-FDU/BigDL/issues",
-        'About': "# Something about this app"
+        'Get help': 'https://github.com/Infinite-FDU/OptiPrompt',
+        'Report a bug': "https://github.com/Infinite-FDU/OptiPrompt/issues",
+        'About': "### Prompt optimization based on bigdl-llm and local int4 models"
     }
 )
 
