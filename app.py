@@ -295,15 +295,18 @@ if user_input := st.chat_input("What is up?"):
         logging.info("extracted_response: " + extracted_response)
         response_newlines = extracted_response.replace('\n', '\n\n')
         st.markdown(response_newlines)
-
-        # Manage outputfile
-        with open(output_file_name, "a") as file:
-            file.write("**" + user_input_type + "|** ")
-            file.write(user_prefix + " " + user_input + "\n")
-            file.write(ai_prefix + " " + response_newlines + "\n")
-            file.write(delimiter + "\n")
-    st.session_state.messages.append(
+        st.session_state.messages.append(
         {"role": "assistant", "content": response_newlines})
+
+    # Manage outputfile
+    with open(output_file_name, "a") as file:
+        file.write("**" + user_input_type + "|** ")
+        file.write(user_input + "\n")
+        file.write("**" + ai_prefix + "** " + response_newlines + "\n")
+        file.write(delimiter + "\n")
+    
+def clear_chat_history():
+    st.session_state.messages.clear()
 
 with st.sidebar:
 # Create a button for downloading the image
@@ -314,3 +317,4 @@ with st.sidebar:
             file_name=output_file_name,
             use_container_width=True
         )
+    st.button("Clear chat history", on_click=clear_chat_history)
