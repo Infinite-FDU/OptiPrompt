@@ -55,10 +55,9 @@
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  
+    
+    
   </ol>
 </details>
 
@@ -67,7 +66,7 @@
 <!-- ABOUT THE PROJECT -->
 # About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+![Product Screenshot](images/screenshot.png)
 
 
 Welcome to the **OptiPrompt** project, your gateway to a world of intelligent conversation and assistance! 🤖✨
