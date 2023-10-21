@@ -14,7 +14,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <!-- <div align="center">
-  <a href="https://github.com/Infinite-FDU/BigDL">
+  <a href="https://github.com/Infinite-FDU/OptiPrompt">
     <img src="images/logo.jpg" alt="Logo" width="80" height="80">
   </a> -->
 
@@ -23,14 +23,14 @@
   <p align="center">
     A conversational AI chatbot for enhancing user queries and assisting in generating improved questions.
     <br />
-    <a href="https://github.com/Infinite-FDU/BigDL"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/Infinite-FDU/OptiPrompt"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/Infinite-FDU/BigDL">View Demo</a>
+    <a href="https://github.com/Infinite-FDU/OptiPrompt">View Demo</a>
     ·
-    <a href="https://github.com/Infinite-FDU/BigDL/issues">Report Bug</a>
+    <a href="https://github.com/Infinite-FDU/OptiPrompt/issues">Report Bug</a>
     ·
-    <a href="https://github.com/Infinite-FDU/BigDL/issues">Request Feature</a>
+    <a href="https://github.com/Infinite-FDU/OptiPrompt/issues">Request Feature</a>
   </p>
 </div>
 
