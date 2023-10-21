@@ -101,7 +101,7 @@ Before getting started with the project, ensure that you have the following prer
 
 ## Prerequisites
 
-- **Python 3.10**: You'll need Python 3.10 to run this project. We recommend using Anaconda to manage your Python environments. You can create a Python 3.10 environment with the following command:
+- **Python 3.9**: You'll need Python 3.10 to run this project. We recommend using Anaconda to manage your Python environments. You can create a Python 3.10 environment with the following command:
 
 ```bash
 conda create -n infinite-fdu python=3.9
@@ -117,7 +117,7 @@ conda activate infinite-fdu
 
 1. Clone the repository to your local machine using the following command:
    ```bash
-   git clone https://github.com/Infinite-FDU/BigDL
+   git clone https://github.com/Infinite-FDU/OptiPrompt
    ```
 2. Navigate to the project directory
 3. Install the project dependencies from the `requirements.txt` file:
@@ -199,7 +199,7 @@ _For more examples, please refer to the [Documentation](https://python.langchain
 <!-- ROADMAP -->
 # Roadmap
 
-<!-- ## Version 1.0.0 (Initial Release)
+## Version 1.0.0 (Initial Release)
 - [x] Streamlit app setup with customizable settings and styling.
 - [x] Integration of Transformers LLM with support for model selection.
 - [x] Four distinct input types: multi-step, judge, code, and default.
@@ -209,124 +209,15 @@ _For more examples, please refer to the [Documentation](https://python.langchain
 - [x] Save customized instructions to a local file for future sessions.
 - [x] Documentation and GitHub repository setup.
 
-## Version 1.1.0 (Enhancements)
-- [ ] User authentication for personalized experiences.
-- [ ] Integration of additional language models for diverse responses.
-- [ ] Enhanced UI features, including themes and user preferences.
-- [ ] Expansion of prompt optimization techniques.
-- [ ] Language translation capabilities for multilingual interactions.
-- [ ] Feedback system to allow users to rate AI responses.
-- [ ] Integration with voice-based interactions for hands-free use.
-
-## Version 2.0.0 (Advanced Features)
-- [ ] Mobile app development for on-the-go chatbot access.
-- [ ] Real-time collaboration features for teamwork.
-- [ ] Integration with external databases for context persistence.
-- [ ] Machine learning for context-aware responses.
-- [ ] Natural language understanding for more precise interactions.
-- [ ] Advanced error handling and debugging tools.
-- [ ] Performance optimizations for scalability.
-
 ## Future Versions
 - [ ] Continued language support expansion.
-- [ ] Integration with popular virtual assistants (e.g., Siri, Alexa).
+- [ ] Integration with other local models.
 - [ ] Collaboration with domain-specific experts for specialized knowledge.
 - [ ] Exploration of educational and research applications.
 - [ ] User feedback sessions for continuous improvement.
 
 
 
-See the [open issues](https://github.com/Infinite-FDU/BigDL/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
-CONTRIBUTING -->
-
-# Contributing
-
-🎉 We welcome contributions from the community! If you'd like to get involved and help improve the OptiPrompt project, here's how you can contribute:
-
-1. **Bug Reports:** If you encounter any issues while using the app, please [submit a bug report](https://github.com/Infinite-FDU/BigDL/issues) on our GitHub repository. Be sure to include as many details as possible, including screenshots and steps to reproduce the problem.
-
-2. **Feature Requests:** Have an idea for a new feature or enhancement? Share it with us by opening a [feature request](https://github.com/Infinite-FDU/BigDL/issues). We value your input and would love to hear your suggestions.
-
-3. **Code Contributions:** If you're a developer and would like to contribute code to the project, feel free to fork the repository, make your changes, and submit a [pull request](https://github.com/Infinite-FDU/BigDL/pulls). We follow best practices for code review and collaboration.
-
-4. **Feedback and Ideas:** Even if you're not a developer, your feedback and ideas are valuable to us. Please reach out to our team via email or our community forum:
-
-    - 📧 **Email 1:** [contributor1@example.com](mailto:contributor1@example.com)
-    - 📧 **Email 2:** [contributor2@example.com](mailto:contributor2@example.com)
-    - 📧 **Email 3:** [contributor3@example.com](mailto:contributor3@example.com)
-
-We're committed to making this project better with your help, and we appreciate your contributions, large or small. Thank you for being a part of the OptiPrompt community!
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- LICENSE -->
-# License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- CONTACT -->
-# Contact
-
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
-
-Project Link: [https://github.com/Infinite-FDU/BigDL](https://github.com/Infinite-FDU/BigDL)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-# Acknowledgments
-
-* []()
-* []()
-* []()
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
-[contributors-url]: https://github.com/Infinite-FDU/BigDL/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo_name.svg?style=for-the-badge
-[forks-url]: https://github.com/Infinite-FDU/BigDL/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo_name.svg?style=for-the-badge
-[stars-url]: https://github.com/Infinite-FDU/BigDL/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
-[issues-url]: https://github.com/Infinite-FDU/BigDL/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
-[license-url]: https://github.com/Infinite-FDU/BigDL/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
-[product-screenshot]: images/screenshot.png
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[React-url]: https://reactjs.org/
-[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[Vue-url]: https://vuejs.org/
-[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
-[Angular-url]: https://angular.io/
-[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
-[Svelte-url]: https://svelte.dev/
-[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
-[Laravel-url]: https://laravel.com
-[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-[Bootstrap-url]: https://getbootstrap.com
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
-[Streamlit-url]: https://streamlit.io
