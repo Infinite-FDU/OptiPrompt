@@ -3,7 +3,7 @@ import streamlit as st
 from bigdl.llm.langchain.llms import TransformersLLM
 from langchain.prompts import ChatPromptTemplate
 from langchain.chains import LLMChain
-from langchain.schema import SystemMessage
+from langchain.schema import SystemMessage, HumanMessage
 
 import re
 import os
@@ -40,7 +40,7 @@ logging.info("Streamlit page configured")
 @st.cache_resource
 def load_transformers_llm(model_name):
     # Define the base folder path
-    base_folder_path = "F:/Study/Code/llm-models"
+    base_folder_path = "E:/Code/llm_models"
 
     # Append MODEL_NAME to the folder path
     model_path = base_folder_path + "/" + model_name
@@ -51,6 +51,14 @@ def load_transformers_llm(model_name):
             model_kwargs={"temperature": 0.2, "trust_remote_code": True},
 
         )
+    elif (model_name == "chatglm2-6b"):
+        logging.info("Loading chatglm model")
+        llm = TransformersLLM.from_model_id_low_bit(
+            model_id=model_path,
+            model_kwargs={"temperature": 0.2, "trust_remote_code": True},
+
+        )
+        logging.info("Chatglm loaded")
 
     return llm
 
@@ -62,7 +70,10 @@ if "custom_instruction" not in st.session_state:
 with st.sidebar:
     # Create a selectbox to choose a local model with default options
     model_name = st.selectbox(
-        'Choose local model', ("Baichuan-13B-Chat", ""), placeholder="Select...")
+        'Choose local model', ("Baichuan-13B-Chat", "chatglm2-6b"), placeholder="Select...", index=None)
+    if (model_name == None):
+        st.warning("Please select a model!")
+        st.stop()
     st.write("Model name:", model_name)
 
     # Create a radio button group for selecting input types
@@ -162,7 +173,7 @@ multi_step_init_prompt = ChatPromptTemplate.from_template(
 multi_step_instruction = """
 您是一个语言模型提示词撰写专家，你的工作是为用户优化他们的问题，输出更好的问题，而非回答问题，你修改后的答案将提供给更强大的语言模型，由他们来给出问题的答案。
 用户的输入可能涉及一个复杂的问题，如果直接让语言模型回答这个问题效果并不好。所以请你思考：如果解决这个问题可以分为哪些子问题？并且将每个小问题作为优化过的问题输出。
-优化过的问题将以“你好，AI助手，基于已有问题%原有问题%，我将问题拆分为几个小问题，所以想向你咨询下列问题：”，以“请逐个回答上述问题，一步步思考。”结尾。
+优化过的问题将以“你好，AI助手，基于已有问题%原有问题%，我将问题拆分为几个小问题，所以想向你咨询下列问题：”，以“请逐个回答上述问题，一步步思考。”
 
 例子1：
 输入：如何使用语言模型？
@@ -179,12 +190,17 @@ multi_step_instruction = """
 输入：如何赚到100万？
 修改后的输入：
 你好，AI助手，基于已有问题“如何赚到100万？”，我将问题拆分为几步，所以想向你咨询下列问题：
-1.如何找到一份高薪的工作？
+1. 如何找到一份高薪的工作？
 2. 如何提高自己的技能和知识水平以获得更高薪资？
 3. 如何合理规划财务以实现财富增值？
 4. 在什么行业或领域中更容易赚取百万以上的收入？
 5. 如何在职场上建立良好的人际关系从而提升个人价值？
 """
+
+multi_step_instruction_1 = """
+您是一个语言模型提示词撰写专家，你的工作是为用户优化他们的问题，输出更好的问题，而非回答问题，你修改后的答案将提供给更强大的语言模型，由他们来给出问题的答案。
+用户的输入可能涉及一个复杂的问题，如果直接让语言模型回答这个问题效果并不好。所以请你思考：如果解决这个问题可以分为哪些子问题？并且将每个小问题作为优化过的问题输出。
+优化过的问题将以“你好，AI助手，基于已有问题%原有问题%，我将问题拆分为几个小问题，所以想向你咨询下列问题：”，以“请逐个回答上述问题，一步步思考。”"""
 
 code_instruction = """
 您是一个代码优化AI助手。
@@ -234,9 +250,10 @@ default_instruction = """您是一个语言模型提示词撰写专家，你的�
 # ==================== Generate Chains =================== #
 # ======================================================== #
 
-system_message = SystemMessage(content=st.session_state.custom_instruction)
+system_message = HumanMessage(content=st.session_state.custom_instruction * 3+ "请一定在回答中利用这些信息。")
 
 final_prompt = (system_message + init_prompt)
+# final_prompt
 chain = LLMChain(llm=llm, prompt=final_prompt)
 
 multi_step_final_prompt = (system_message + multi_step_init_prompt)
